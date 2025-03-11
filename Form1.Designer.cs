@@ -206,7 +206,7 @@
             tabControl1.Name = "tabControl1";
             tabControl1.Padding = new Point(3, 2);
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(439, 234);
+            tabControl1.Size = new Size(439, 223);
             tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -217,7 +217,7 @@
             tabPage1.Location = new Point(4, 19);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(431, 211);
+            tabPage1.Size = new Size(431, 200);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Add Albums";
             // 
@@ -242,7 +242,7 @@
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(0);
-            groupBox1.Size = new Size(425, 205);
+            groupBox1.Size = new Size(425, 194);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
@@ -384,10 +384,10 @@
             webVideo.BackColor = Color.Black;
             webVideo.CreationProperties = null;
             webVideo.DefaultBackgroundColor = Color.Black;
-            webVideo.Location = new Point(3, 243);
+            webVideo.Location = new Point(3, 228);
             webVideo.Name = "webVideo";
             webVideo.Padding = new Padding(3, 5, 3, 5);
-            webVideo.Size = new Size(439, 294);
+            webVideo.Size = new Size(439, 309);
             webVideo.TabIndex = 1;
             webVideo.ZoomFactor = 1D;
             // 
