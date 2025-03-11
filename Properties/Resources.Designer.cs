@@ -73,6 +73,16 @@ namespace MusicWebPlayer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap RolEmiLogo_03 {
+            get {
+                object obj = ResourceManager.GetObject("RolEmiLogo_03", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap yt_music_channel {
             get {
                 object obj = ResourceManager.GetObject("yt_music_channel", resourceCulture);

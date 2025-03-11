@@ -7,6 +7,8 @@ using Microsoft.Web.WebView2.Core;
 using Microsoft.VisualBasic.ApplicationServices;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Data.SQLite;
+
 
 namespace MusicWebPlayer
 {
@@ -17,6 +19,8 @@ namespace MusicWebPlayer
         BindingSource albumBindingSourceDesc = new BindingSource();
 
         BindingSource tracksBindingSource = new BindingSource();
+
+        public string sqliteConnectionString = "Data Source=rolemimusic.db;Version=3;";
 
         public Microsoft.Web.WebView2.Core.CoreWebView2 CoreWebView2 { get; }
 
@@ -53,7 +57,7 @@ namespace MusicWebPlayer
             await webVideo.EnsureCoreWebView2Async(null);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void bnt_LoadAlbums_Click(object sender, EventArgs e)
         {
             // create two fake data items
             /*
@@ -85,15 +89,19 @@ namespace MusicWebPlayer
             */
 
             AlbumsDAO albumdao = new AlbumsDAO();
+            SQLiteDAO albums = new SQLiteDAO(sqliteConnectionString);
 
-            // Connect the list to the grid view control
-            albumBindingSource.DataSource = albumdao.getAllAlbums();
+            // get Album data from MySQL database
+            //albumBindingSource.DataSource = albumdao.getAllAlbums();
+
+            // get Album data from SQLite database
+            albumBindingSource.DataSource = albums.GetAlbumsData();
 
             dataGridView1.DataSource = albumBindingSource;
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void bnt_Search_Click(object sender, EventArgs e)
         {
             // search button
             AlbumsDAO albumdao = new AlbumsDAO();
@@ -170,7 +178,32 @@ namespace MusicWebPlayer
                     Description = txt_Description.Text
                 };
 
+                // Insert into SQLite ALBUMS
+                
+                SQLiteDAO sqliteDb = new SQLiteDAO(sqliteConnectionString);
+
+                SQLiteConnection sqlite_conn;
+                sqlite_conn = sqliteDb.CreateConnection();
+
+                // Create tables ALBUMS and TRACKS if they don't exist
+                sqliteDb.CreateTables(sqlite_conn);
+                
+                sqliteDb.InsertAlbumData(sqlite_conn, album);
+
+                // Retrieve Albums from SQLite database
+                List<Album> readAlbum = sqliteDb.GetAlbumsData();
+
+                foreach (var row in  readAlbum)
+                {
+                    Console.WriteLine($"ID: {row.ID}, Title: {row.SongName}, Artist: {row.ArtistName}, Year: {row.ReleaseYear}, Image: {row.ImageURL}, VidURL: {row.PlayURL}, Description: {row.Description}" );
+                }
+                albumBindingSource.DataSource = readAlbum;
+                dataGridView1.DataSource = albumBindingSource;
+                return;
+                /*------*/
+                // Insert into MySQL ALBUMS             
                 AlbumsDAO albumdao = new AlbumsDAO();
+
                 int result = albumdao.addOneAlbum(album);
                 if (result == 1)
                 {

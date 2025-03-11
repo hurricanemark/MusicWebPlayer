@@ -1,0 +1,3 @@
+﻿# TODOs
+
+- remove traks table
