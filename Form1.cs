@@ -54,8 +54,11 @@ namespace MusicWebPlayer
         }
         async void InitializeAsync()
         {
+            // Create and initialize the WebView2
             await webVideo.EnsureCoreWebView2Async(null);
         }
+
+
 
         private void bnt_LoadAlbums_Click(object sender, EventArgs e)
         {
@@ -241,7 +244,16 @@ namespace MusicWebPlayer
                 String videoURL = gv.Rows[rowClicked].Cells[3].Value.ToString();
                 if (webVideo != null && webVideo.CoreWebView2 != null)
                 {
+                    // Set the WebView2 URL
                     webVideo.CoreWebView2.Navigate(videoURL);
+
+                    // Wait for the document to load and then request full-screen mode
+                    webVideo.CoreWebView2.NavigationCompleted += (sender, args) =>
+                    {
+                        // JavaScript to request full-screen mode
+                        webVideo.CoreWebView2.ExecuteScriptAsync("document.documentElement.requestFullscreen();");
+                    };
+
                 }
             }
         }

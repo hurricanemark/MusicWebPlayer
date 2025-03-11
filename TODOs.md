@@ -1,3 +1,3 @@
 ﻿# TODOs
 
-- remove traks table
+- remove tracks table

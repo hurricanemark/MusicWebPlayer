@@ -41,6 +41,7 @@
             pictureBox1 = new PictureBox();
             textBox2 = new TextBox();
             splitContainer1 = new SplitContainer();
+            splitContainer2 = new SplitContainer();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             groupBox1 = new GroupBox();
@@ -68,6 +69,10 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -177,8 +182,7 @@
             // splitContainer1.Panel1
             // 
             splitContainer1.Panel1.BackColor = Color.Transparent;
-            splitContainer1.Panel1.Controls.Add(tabControl1);
-            splitContainer1.Panel1.Controls.Add(webVideo);
+            splitContainer1.Panel1.Controls.Add(splitContainer2);
             // 
             // splitContainer1.Panel2
             // 
@@ -196,17 +200,37 @@
             splitContainer1.SplitterDistance = 445;
             splitContainer1.TabIndex = 7;
             // 
+            // splitContainer2
+            // 
+            splitContainer2.BorderStyle = BorderStyle.Fixed3D;
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(tabControl1);
+            splitContainer2.Panel1.Padding = new Padding(2);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(webVideo);
+            splitContainer2.Size = new Size(445, 541);
+            splitContainer2.SplitterDistance = 243;
+            splitContainer2.TabIndex = 3;
+            // 
             // tabControl1
             // 
-            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tabControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Font = new Font("Segoe UI", 7F);
-            tabControl1.Location = new Point(3, 3);
+            tabControl1.Location = new Point(5, 5);
             tabControl1.Name = "tabControl1";
             tabControl1.Padding = new Point(3, 2);
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(439, 234);
+            tabControl1.Size = new Size(437, 229);
             tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -217,7 +241,7 @@
             tabPage1.Location = new Point(4, 19);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(431, 211);
+            tabPage1.Size = new Size(429, 206);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Add Albums";
             // 
@@ -242,7 +266,7 @@
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(0);
-            groupBox1.Size = new Size(425, 205);
+            groupBox1.Size = new Size(423, 200);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
@@ -250,7 +274,7 @@
             // 
             button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button3.BackColor = Color.DarkOliveGreen;
-            button3.Location = new Point(363, 38);
+            button3.Location = new Point(361, 38);
             button3.Name = "button3";
             button3.Size = new Size(59, 117);
             button3.TabIndex = 12;
@@ -265,7 +289,7 @@
             txt_Description.MinimumSize = new Size(75, 0);
             txt_Description.Multiline = true;
             txt_Description.Name = "txt_Description";
-            txt_Description.Size = new Size(260, 23);
+            txt_Description.Size = new Size(258, 23);
             txt_Description.TabIndex = 11;
             // 
             // txt_SourceURL
@@ -274,7 +298,7 @@
             txt_SourceURL.Location = new Point(97, 131);
             txt_SourceURL.MinimumSize = new Size(75, 0);
             txt_SourceURL.Name = "txt_SourceURL";
-            txt_SourceURL.Size = new Size(260, 20);
+            txt_SourceURL.Size = new Size(258, 20);
             txt_SourceURL.TabIndex = 10;
             // 
             // txt_ImageURL
@@ -283,7 +307,7 @@
             txt_ImageURL.Location = new Point(97, 103);
             txt_ImageURL.MinimumSize = new Size(75, 0);
             txt_ImageURL.Name = "txt_ImageURL";
-            txt_ImageURL.Size = new Size(260, 20);
+            txt_ImageURL.Size = new Size(258, 20);
             txt_ImageURL.TabIndex = 9;
             // 
             // txt_Year
@@ -292,7 +316,7 @@
             txt_Year.Location = new Point(97, 74);
             txt_Year.MinimumSize = new Size(50, 0);
             txt_Year.Name = "txt_Year";
-            txt_Year.Size = new Size(144, 20);
+            txt_Year.Size = new Size(142, 20);
             txt_Year.TabIndex = 8;
             // 
             // txt_Artist
@@ -301,7 +325,7 @@
             txt_Artist.Location = new Point(97, 44);
             txt_Artist.MinimumSize = new Size(75, 0);
             txt_Artist.Name = "txt_Artist";
-            txt_Artist.Size = new Size(260, 20);
+            txt_Artist.Size = new Size(258, 20);
             txt_Artist.TabIndex = 7;
             // 
             // txt_SongName
@@ -310,7 +334,7 @@
             txt_SongName.Location = new Point(97, 14);
             txt_SongName.MinimumSize = new Size(75, 0);
             txt_SongName.Name = "txt_SongName";
-            txt_SongName.Size = new Size(260, 20);
+            txt_SongName.Size = new Size(258, 20);
             txt_SongName.TabIndex = 6;
             // 
             // label6
@@ -372,7 +396,7 @@
             tabPage2.Location = new Point(4, 19);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(431, 211);
+            tabPage2.Size = new Size(429, 206);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Add Tracks";
             tabPage2.UseVisualStyleBackColor = true;
@@ -384,10 +408,10 @@
             webVideo.BackColor = Color.Black;
             webVideo.CreationProperties = null;
             webVideo.DefaultBackgroundColor = Color.Black;
-            webVideo.Location = new Point(3, 243);
+            webVideo.Location = new Point(5, 3);
             webVideo.Name = "webVideo";
             webVideo.Padding = new Padding(3, 5, 3, 5);
-            webVideo.Size = new Size(439, 294);
+            webVideo.Size = new Size(433, 283);
             webVideo.TabIndex = 1;
             webVideo.ZoomFactor = 1D;
             // 
@@ -460,6 +484,10 @@
             splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             groupBox1.ResumeLayout(false);
@@ -499,5 +527,6 @@
         private TabControl tabControl1;
         private TabPage tabPage1;
         private TabPage tabPage2;
+        private SplitContainer splitContainer2;
     }
 }
