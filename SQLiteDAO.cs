@@ -126,9 +126,15 @@ namespace MusicWebPlayer
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sql_conn.CreateCommand();
-            
+
             sqlite_cmd.CommandText = "INSERT INTO TRACKS(track_title, number, video_url, lyrics, albums_ID) " +
-                                     "VALUES (" + newTr.Name + ", " + newTr.Number + ", " + newTr.VideoURL +", " + newTr.Lyrics + ", " + albumID + ") ";
+                                     "VALUES (@TrackName, @TrackNumber, @VideoURL, @Lyrics, @AlbumID) ON CONFLICT(track_title) DO NOTHING";
+            sqlite_cmd.Parameters.AddWithValue("@TrackName", newTr.Name);
+            sqlite_cmd.Parameters.AddWithValue("@TrackNumber", newTr.Number);
+            sqlite_cmd.Parameters.AddWithValue("@VideoURL", newTr.VideoURL);
+            sqlite_cmd.Parameters.AddWithValue("@Lyrics", newTr.Lyrics);
+            sqlite_cmd.Parameters.AddWithValue("@AlbumID", newTr.Albums_ID);
+            
             int returnCode = sqlite_cmd.ExecuteNonQuery();
             sql_conn.Close() ;
             return returnCode;

@@ -44,21 +44,29 @@
             splitContainer2 = new SplitContainer();
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            groupBox1 = new GroupBox();
-            button3 = new Button();
             txt_Description = new TextBox();
+            bnt_AddAlbum = new Button();
             txt_SourceURL = new TextBox();
-            txt_ImageURL = new TextBox();
-            txt_Year = new TextBox();
-            txt_Artist = new TextBox();
-            txt_SongName = new TextBox();
             label6 = new Label();
             label5 = new Label();
-            label4 = new Label();
-            label3 = new Label();
-            label2 = new Label();
+            txt_Artist = new TextBox();
             label1 = new Label();
+            txt_ImageURL = new TextBox();
+            label2 = new Label();
+            txt_Year = new TextBox();
+            label3 = new Label();
+            label4 = new Label();
+            txt_SongName = new TextBox();
             tabPage2 = new TabPage();
+            label11 = new Label();
+            comboBoxAlbum = new ComboBox();
+            bnt_AddTrack = new Button();
+            tbxLyrics = new TextBox();
+            txt_VidURL = new TextBox();
+            label10 = new Label();
+            txt_TrackName = new TextBox();
+            label9 = new Label();
+            label8 = new Label();
             webVideo = new Microsoft.Web.WebView2.WinForms.WebView2();
             label7 = new Label();
             dataGridView2 = new DataGridView();
@@ -75,7 +83,7 @@
             splitContainer2.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
-            groupBox1.SuspendLayout();
+            tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)webVideo).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
@@ -235,8 +243,21 @@
             // 
             // tabPage1
             // 
+            tabPage1.AutoScroll = true;
             tabPage1.BackColor = Color.Black;
-            tabPage1.Controls.Add(groupBox1);
+            tabPage1.Controls.Add(txt_Description);
+            tabPage1.Controls.Add(bnt_AddAlbum);
+            tabPage1.Controls.Add(txt_SourceURL);
+            tabPage1.Controls.Add(label6);
+            tabPage1.Controls.Add(label5);
+            tabPage1.Controls.Add(txt_Artist);
+            tabPage1.Controls.Add(label1);
+            tabPage1.Controls.Add(txt_ImageURL);
+            tabPage1.Controls.Add(label2);
+            tabPage1.Controls.Add(txt_Year);
+            tabPage1.Controls.Add(label3);
+            tabPage1.Controls.Add(label4);
+            tabPage1.Controls.Add(txt_SongName);
             tabPage1.ForeColor = Color.Black;
             tabPage1.Location = new Point(4, 19);
             tabPage1.Name = "tabPage1";
@@ -245,102 +266,42 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Add Albums";
             // 
-            // groupBox1
-            // 
-            groupBox1.BackColor = Color.Black;
-            groupBox1.Controls.Add(button3);
-            groupBox1.Controls.Add(txt_Description);
-            groupBox1.Controls.Add(txt_SourceURL);
-            groupBox1.Controls.Add(txt_ImageURL);
-            groupBox1.Controls.Add(txt_Year);
-            groupBox1.Controls.Add(txt_Artist);
-            groupBox1.Controls.Add(txt_SongName);
-            groupBox1.Controls.Add(label6);
-            groupBox1.Controls.Add(label5);
-            groupBox1.Controls.Add(label4);
-            groupBox1.Controls.Add(label3);
-            groupBox1.Controls.Add(label2);
-            groupBox1.Controls.Add(label1);
-            groupBox1.Dock = DockStyle.Fill;
-            groupBox1.ForeColor = Color.White;
-            groupBox1.Location = new Point(3, 3);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(0);
-            groupBox1.Size = new Size(423, 200);
-            groupBox1.TabIndex = 0;
-            groupBox1.TabStop = false;
-            // 
-            // button3
-            // 
-            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.BackColor = Color.DarkOliveGreen;
-            button3.Location = new Point(361, 38);
-            button3.Name = "button3";
-            button3.Size = new Size(59, 117);
-            button3.TabIndex = 12;
-            button3.Text = "&Add";
-            button3.UseVisualStyleBackColor = false;
-            button3.Click += button3_Click;
-            // 
             // txt_Description
             // 
             txt_Description.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txt_Description.Location = new Point(97, 160);
+            txt_Description.Location = new Point(65, 120);
             txt_Description.MinimumSize = new Size(75, 0);
             txt_Description.Multiline = true;
             txt_Description.Name = "txt_Description";
-            txt_Description.Size = new Size(258, 23);
+            txt_Description.Size = new Size(280, 45);
             txt_Description.TabIndex = 11;
+            // 
+            // bnt_AddAlbum
+            // 
+            bnt_AddAlbum.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            bnt_AddAlbum.BackColor = Color.DarkOliveGreen;
+            bnt_AddAlbum.Location = new Point(356, 14);
+            bnt_AddAlbum.Name = "bnt_AddAlbum";
+            bnt_AddAlbum.Size = new Size(45, 61);
+            bnt_AddAlbum.TabIndex = 12;
+            bnt_AddAlbum.Text = "&Add Album";
+            bnt_AddAlbum.UseVisualStyleBackColor = false;
+            bnt_AddAlbum.Click += bnt_AddAlbum_Click;
             // 
             // txt_SourceURL
             // 
-            txt_SourceURL.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txt_SourceURL.Location = new Point(97, 131);
+            txt_SourceURL.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txt_SourceURL.Location = new Point(65, 171);
             txt_SourceURL.MinimumSize = new Size(75, 0);
             txt_SourceURL.Name = "txt_SourceURL";
-            txt_SourceURL.Size = new Size(258, 20);
+            txt_SourceURL.Size = new Size(280, 20);
             txt_SourceURL.TabIndex = 10;
-            // 
-            // txt_ImageURL
-            // 
-            txt_ImageURL.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txt_ImageURL.Location = new Point(97, 103);
-            txt_ImageURL.MinimumSize = new Size(75, 0);
-            txt_ImageURL.Name = "txt_ImageURL";
-            txt_ImageURL.Size = new Size(258, 20);
-            txt_ImageURL.TabIndex = 9;
-            // 
-            // txt_Year
-            // 
-            txt_Year.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txt_Year.Location = new Point(97, 74);
-            txt_Year.MinimumSize = new Size(50, 0);
-            txt_Year.Name = "txt_Year";
-            txt_Year.Size = new Size(142, 20);
-            txt_Year.TabIndex = 8;
-            // 
-            // txt_Artist
-            // 
-            txt_Artist.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txt_Artist.Location = new Point(97, 44);
-            txt_Artist.MinimumSize = new Size(75, 0);
-            txt_Artist.Name = "txt_Artist";
-            txt_Artist.Size = new Size(258, 20);
-            txt_Artist.TabIndex = 7;
-            // 
-            // txt_SongName
-            // 
-            txt_SongName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txt_SongName.Location = new Point(97, 14);
-            txt_SongName.MinimumSize = new Size(75, 0);
-            txt_SongName.Name = "txt_SongName";
-            txt_SongName.Size = new Size(258, 20);
-            txt_SongName.TabIndex = 6;
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(11, 160);
+            label6.ForeColor = Color.White;
+            label6.Location = new Point(3, 120);
             label6.Name = "label6";
             label6.Size = new Size(56, 12);
             label6.TabIndex = 5;
@@ -349,69 +310,201 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(17, 134);
+            label5.ForeColor = Color.White;
+            label5.Location = new Point(4, 174);
             label5.Name = "label5";
-            label5.Size = new Size(53, 12);
+            label5.Size = new Size(55, 12);
             label5.TabIndex = 4;
-            label5.Text = "SourceURL";
+            label5.Text = "SourceURL:";
             // 
-            // label4
+            // txt_Artist
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(17, 101);
-            label4.Name = "label4";
-            label4.Size = new Size(53, 12);
-            label4.TabIndex = 3;
-            label4.Text = "ImageURL:";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(49, 74);
-            label3.Name = "label3";
-            label3.Size = new Size(25, 12);
-            label3.TabIndex = 2;
-            label3.Text = "Year:";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(43, 47);
-            label2.Name = "label2";
-            label2.Size = new Size(28, 12);
-            label2.TabIndex = 1;
-            label2.Text = "Artist:";
+            txt_Artist.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txt_Artist.Location = new Point(65, 40);
+            txt_Artist.MinimumSize = new Size(75, 0);
+            txt_Artist.Name = "txt_Artist";
+            txt_Artist.Size = new Size(280, 20);
+            txt_Artist.TabIndex = 7;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 17);
+            label1.ForeColor = Color.White;
+            label1.Location = new Point(3, 17);
             label1.Name = "label1";
             label1.Size = new Size(56, 12);
             label1.TabIndex = 0;
             label1.Text = "SongName:";
             // 
+            // txt_ImageURL
+            // 
+            txt_ImageURL.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txt_ImageURL.Location = new Point(65, 94);
+            txt_ImageURL.MinimumSize = new Size(75, 0);
+            txt_ImageURL.Name = "txt_ImageURL";
+            txt_ImageURL.Size = new Size(280, 20);
+            txt_ImageURL.TabIndex = 9;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.ForeColor = Color.White;
+            label2.Location = new Point(31, 43);
+            label2.Name = "label2";
+            label2.Size = new Size(28, 12);
+            label2.TabIndex = 1;
+            label2.Text = "Artist:";
+            // 
+            // txt_Year
+            // 
+            txt_Year.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txt_Year.Location = new Point(65, 65);
+            txt_Year.MinimumSize = new Size(50, 0);
+            txt_Year.Name = "txt_Year";
+            txt_Year.Size = new Size(151, 20);
+            txt_Year.TabIndex = 8;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(34, 65);
+            label3.Name = "label3";
+            label3.Size = new Size(25, 12);
+            label3.TabIndex = 2;
+            label3.Text = "Year:";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = Color.White;
+            label4.Location = new Point(6, 92);
+            label4.Name = "label4";
+            label4.Size = new Size(53, 12);
+            label4.TabIndex = 3;
+            label4.Text = "ImageURL:";
+            // 
+            // txt_SongName
+            // 
+            txt_SongName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txt_SongName.Location = new Point(65, 14);
+            txt_SongName.MinimumSize = new Size(75, 0);
+            txt_SongName.Name = "txt_SongName";
+            txt_SongName.Size = new Size(280, 20);
+            txt_SongName.TabIndex = 6;
+            // 
             // tabPage2
             // 
+            tabPage2.AutoScroll = true;
+            tabPage2.BackColor = Color.Black;
+            tabPage2.Controls.Add(label11);
+            tabPage2.Controls.Add(comboBoxAlbum);
+            tabPage2.Controls.Add(bnt_AddTrack);
+            tabPage2.Controls.Add(tbxLyrics);
+            tabPage2.Controls.Add(txt_VidURL);
+            tabPage2.Controls.Add(label10);
+            tabPage2.Controls.Add(txt_TrackName);
+            tabPage2.Controls.Add(label9);
+            tabPage2.Controls.Add(label8);
             tabPage2.Location = new Point(4, 19);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(429, 206);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Add Tracks";
-            tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(20, 23);
+            label11.Name = "label11";
+            label11.Size = new Size(36, 12);
+            label11.TabIndex = 9;
+            label11.Text = "Album:";
+            // 
+            // comboBoxAlbum
+            // 
+            comboBoxAlbum.FormattingEnabled = true;
+            comboBoxAlbum.Location = new Point(62, 15);
+            comboBoxAlbum.Name = "comboBoxAlbum";
+            comboBoxAlbum.Size = new Size(284, 20);
+            comboBoxAlbum.TabIndex = 8;
+            // 
+            // bnt_AddTrack
+            // 
+            bnt_AddTrack.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            bnt_AddTrack.BackColor = Color.DarkOliveGreen;
+            bnt_AddTrack.Location = new Point(366, 15);
+            bnt_AddTrack.Name = "bnt_AddTrack";
+            bnt_AddTrack.Size = new Size(41, 65);
+            bnt_AddTrack.TabIndex = 7;
+            bnt_AddTrack.Text = "&Add Track";
+            bnt_AddTrack.UseVisualStyleBackColor = false;
+            bnt_AddTrack.Click += button1_Click;
+            // 
+            // tbxLyrics
+            // 
+            tbxLyrics.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbxLyrics.Location = new Point(62, 67);
+            tbxLyrics.Multiline = true;
+            tbxLyrics.Name = "tbxLyrics";
+            tbxLyrics.Size = new Size(284, 107);
+            tbxLyrics.TabIndex = 6;
+            // 
+            // txt_VidURL
+            // 
+            txt_VidURL.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txt_VidURL.Location = new Point(62, 180);
+            txt_VidURL.Name = "txt_VidURL";
+            txt_VidURL.Size = new Size(284, 20);
+            txt_VidURL.TabIndex = 5;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(25, 67);
+            label10.Name = "label10";
+            label10.Size = new Size(31, 12);
+            label10.TabIndex = 4;
+            label10.Text = "Lyrics:";
+            // 
+            // txt_TrackName
+            // 
+            txt_TrackName.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txt_TrackName.Location = new Point(62, 41);
+            txt_TrackName.Name = "txt_TrackName";
+            txt_TrackName.Size = new Size(284, 20);
+            txt_TrackName.TabIndex = 3;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(6, 183);
+            label9.Name = "label9";
+            label9.Size = new Size(50, 12);
+            label9.TabIndex = 2;
+            label9.Text = "VideoURL:";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(10, 47);
+            label8.Name = "label8";
+            label8.Size = new Size(46, 12);
+            label8.TabIndex = 1;
+            label8.Text = "TrackTitle:";
             // 
             // webVideo
             // 
             webVideo.AllowExternalDrop = true;
-            webVideo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             webVideo.BackColor = Color.Black;
             webVideo.CreationProperties = null;
             webVideo.DefaultBackgroundColor = Color.Black;
-            webVideo.Location = new Point(5, 3);
+            webVideo.Dock = DockStyle.Fill;
+            webVideo.Location = new Point(0, 0);
             webVideo.Name = "webVideo";
             webVideo.Padding = new Padding(3, 5, 3, 5);
-            webVideo.Size = new Size(433, 283);
+            webVideo.Size = new Size(441, 290);
             webVideo.TabIndex = 1;
             webVideo.ZoomFactor = 1D;
             // 
@@ -490,8 +583,9 @@
             splitContainer2.ResumeLayout(false);
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
+            tabPage1.PerformLayout();
+            tabPage2.ResumeLayout(false);
+            tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)webVideo).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ResumeLayout(false);
@@ -506,7 +600,6 @@
         private PictureBox pictureBox1;
         private TextBox textBox2;
         private SplitContainer splitContainer1;
-        private GroupBox groupBox1;
         private Label label6;
         private Label label5;
         private Label label4;
@@ -519,7 +612,7 @@
         private TextBox txt_Year;
         private TextBox txt_Artist;
         private TextBox txt_SongName;
-        private Button button3;
+        private Button bnt_AddAlbum;
         private Label label7;
         private DataGridView dataGridView2;
         private Microsoft.Web.WebView2.WinForms.WebView2 webVideo;
@@ -528,5 +621,14 @@
         private TabPage tabPage1;
         private TabPage tabPage2;
         private SplitContainer splitContainer2;
+        private Label label9;
+        private Label label8;
+        private TextBox tbxLyrics;
+        private TextBox txt_VidURL;
+        private Label label10;
+        private TextBox txt_TrackName;
+        private Button bnt_AddTrack;
+        private Label label11;
+        private ComboBox comboBoxAlbum;
     }
 }

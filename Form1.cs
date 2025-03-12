@@ -158,11 +158,21 @@ namespace MusicWebPlayer
             tracksBindingSource.DataSource = selAlbumDoa.getTracksUsingJoin((int)(dataGridView.Rows[rowClicked].Cells[0].Value));
             dataGridView2.DataSource = tracksBindingSource;
             dataGridView2.ShowCellToolTips = true;
+
+            // Auto select the first row to WebVideo & kickstart the player
+            if (dataGridView2.RowCount >= 1)
+            {
+                // Simulate row click                
+                dataGridView2.Rows[0].Selected = true;
+                dataGridView2_CellContentClick(dataGridView, new DataGridViewCellEventArgs(3, 0));
+
+            }
         }
 
 
+
         // Add song into database
-        private void button3_Click(object sender, EventArgs e)
+        private void bnt_AddAlbum_Click(object sender, EventArgs e)
         {
             // Capture user input
             if (txt_SongName.TextLength == 0 || txt_SourceURL.TextLength == 0 || txt_ImageURL.TextLength == 0 || txt_Artist.TextLength == 0)
@@ -182,7 +192,7 @@ namespace MusicWebPlayer
                 };
 
                 // Insert into SQLite ALBUMS
-                
+
                 SQLiteDAO sqliteDb = new SQLiteDAO(sqliteConnectionString);
 
                 SQLiteConnection sqlite_conn;
@@ -190,42 +200,18 @@ namespace MusicWebPlayer
 
                 // Create tables ALBUMS and TRACKS if they don't exist
                 sqliteDb.CreateTables(sqlite_conn);
-                
+
                 sqliteDb.InsertAlbumData(sqlite_conn, album);
 
                 // Retrieve Albums from SQLite database
                 List<Album> readAlbum = sqliteDb.GetAlbumsData();
 
-                foreach (var row in  readAlbum)
+                foreach (var row in readAlbum)
                 {
-                    Console.WriteLine($"ID: {row.ID}, Title: {row.SongName}, Artist: {row.ArtistName}, Year: {row.ReleaseYear}, Image: {row.ImageURL}, VidURL: {row.PlayURL}, Description: {row.Description}" );
+                    Console.WriteLine($"ID: {row.ID}, Title: {row.SongName}, Artist: {row.ArtistName}, Year: {row.ReleaseYear}, Image: {row.ImageURL}, VidURL: {row.PlayURL}, Description: {row.Description}");
                 }
                 albumBindingSource.DataSource = readAlbum;
                 dataGridView1.DataSource = albumBindingSource;
-                return;
-                /*------*/
-                // Insert into MySQL ALBUMS             
-                AlbumsDAO albumdao = new AlbumsDAO();
-
-                int result = albumdao.addOneAlbum(album);
-                if (result == 1)
-                {
-                    // clear input text
-                    txt_SongName.Text = "";
-                    txt_Artist.Text = "";
-                    txt_Year.Text = "";
-                    txt_ImageURL.Text = "";
-                    txt_SourceURL.Text = "";
-                    txt_Description.Text = "";
-
-                    // reload the play list
-                    AlbumsDAO albumsdao = new AlbumsDAO();
-
-                    // Connect the list to the grid view control
-                    albumBindingSource.DataSource = albumsdao.getAllAlbums();
-
-                    dataGridView1.DataSource = albumBindingSource;
-                }
             }
 
         }
@@ -241,21 +227,31 @@ namespace MusicWebPlayer
             if (gv != null && gv.SelectedRows.Count > 0)
             {
                 // load selected image
-                String videoURL = gv.Rows[rowClicked].Cells[3].Value.ToString();
+                String videoURL = gv.Rows[rowClicked].Cells[5].Value.ToString();
+
                 if (webVideo != null && webVideo.CoreWebView2 != null)
                 {
-                    // Set the WebView2 URL
-                    webVideo.CoreWebView2.Navigate(videoURL);
-
-                    // Wait for the document to load and then request full-screen mode
-                    webVideo.CoreWebView2.NavigationCompleted += (sender, args) =>
+                    try
                     {
-                        // JavaScript to request full-screen mode
-                        webVideo.CoreWebView2.ExecuteScriptAsync("document.documentElement.requestFullscreen();");
-                    };
+                        // Set the WebView2 URL
+                        webVideo.CoreWebView2.Navigate(videoURL);
+
+                        // Wait for the document to load and then request full-screen mode
+                        webVideo.CoreWebView2.NavigationCompleted += (sender, args) =>
+                        {
+                            // JavaScript to request full-screen mode
+                            webVideo.CoreWebView2.ExecuteScriptAsync("document.documentElement.requestFullscreen();");
+                        };
+                    }
+                    catch (Exception ex) { }
 
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
