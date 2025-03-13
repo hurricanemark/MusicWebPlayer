@@ -82,6 +82,6 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 Create a C# Windows Form Desktop application using Visual Studio 2022 with .NET 8.0 framework.
 1. Create a windows form
 2. Create an Album class
-3. Create an Albun Data Access Object class
+3. Create an Album Data Access Object class
 
 ![FrontendApp](media/DesktopApp.png)
