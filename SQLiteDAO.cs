@@ -1,10 +1,15 @@
 ﻿using Google.Protobuf.Collections;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Mysqlx.Expect.Open.Types.Condition.Types;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using String = System.String;
 
 namespace MusicWebPlayer
 {
@@ -51,7 +56,7 @@ namespace MusicWebPlayer
             );
              */
             SQLiteCommand sqlite_cmd;
-            string sqlCreateALBUMSStmt = "PRAGMA foreign_keys = ON; CREATE TABLE IF NOT EXISTS ALBUMS (rowid INTEGER PRIMARY KEY, ALBUM_TITLE TEXT NOT NULL, ARTIST TEXT NOT NULL, YEAR INTEGER NOT NULL, IMAGE_NAME TEXT NOT NULL, DESCRIPTION TEXT NOT NULL, URL TEXT NOT NULL)";
+            string sqlCreateALBUMSStmt = "PRAGMA foreign_keys = ON; CREATE TABLE IF NOT EXISTS ALBUMS (rowid INTEGER PRIMARY KEY, ALBUM_TITLE TEXT NOT NULL UNIQUE, ARTIST TEXT NOT NULL, YEAR INTEGER NOT NULL, IMAGE_NAME TEXT NOT NULL, DESCRIPTION TEXT NOT NULL, URL TEXT NOT NULL)";
             sqlite_cmd = sql_conn.CreateCommand();
             //sql_conn.Open();
             sqlite_cmd.CommandText = sqlCreateALBUMSStmt;
@@ -69,7 +74,7 @@ namespace MusicWebPlayer
                 FOREIGN KEY (albums_ID) REFERENCES ALBUMS(rowid)
             );
              */
-            string sqlCreateTRACKSStmt = "PRAGMA foreign_keys = ON; CREATE TABLE IF NOT EXISTS TRACKS(rowid INTEGER PRIMARY KEY, track_title TEXT DEFAULT NULL, number INTEGER DEFAULT NULL, video_url TEXT DEFAULT NULL, lyrics TEXT, albums_ID INTEGER NOT NULL, FOREIGN KEY (albums_ID) REFERENCES ALBUMS(rowid))";
+            string sqlCreateTRACKSStmt = "PRAGMA foreign_keys = ON; CREATE TABLE IF NOT EXISTS TRACKS(rowid INTEGER PRIMARY KEY, track_title TEXT DEFAULT NULL, number TEXT DEFAULT NULL, video_url TEXT DEFAULT NULL, lyrics TEXT, albums_ID INTEGER NOT NULL, FOREIGN KEY (albums_ID) REFERENCES ALBUMS(rowid))";
             sqlite_cmd.CommandText = sqlCreateTRACKSStmt;
             int returnCode = sqlite_cmd.ExecuteNonQuery();
             sql_conn.Close();
@@ -122,13 +127,14 @@ namespace MusicWebPlayer
             return insertStatus;
         }
 
-        public int InsertTrackData(SQLiteConnection sql_conn, Track newTr, int albumID)
+        public int InsertTrackData(SQLiteConnection sql_conn, Track newTr)
         {
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = sql_conn.CreateCommand();
 
             sqlite_cmd.CommandText = "INSERT INTO TRACKS(track_title, number, video_url, lyrics, albums_ID) " +
-                                     "VALUES (@TrackName, @TrackNumber, @VideoURL, @Lyrics, @AlbumID) ON CONFLICT(track_title) DO NOTHING";
+                                     "VALUES (@TrackName, @TrackNumber, @VideoURL, @Lyrics, @AlbumID)";
+
             sqlite_cmd.Parameters.AddWithValue("@TrackName", newTr.Name);
             sqlite_cmd.Parameters.AddWithValue("@TrackNumber", newTr.Number);
             sqlite_cmd.Parameters.AddWithValue("@VideoURL", newTr.VideoURL);
@@ -175,6 +181,137 @@ namespace MusicWebPlayer
             }
 
             return albums;
+        }
+
+
+        public Album GetAlbumByID(int albumID)
+        {
+            Album album = new Album();
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+
+                string sqlCmdStmt = "SELECT rowid, ALBUM_TITLE, ARTIST, YEAR, IMAGE_NAME, DESCRIPTION, URL FROM ALBUMS WHERE rowid = @ALBUMID";
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.Parameters.AddWithValue("@ALBUMID", albumID);
+                cmd.CommandText = sqlCmdStmt;
+                cmd.Connection = conn;
+                {
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            album.ID = reader.GetInt32(reader.GetOrdinal("rowid"));
+                            album.SongName = reader.GetString(reader.GetOrdinal("ALBUM_TITLE"));
+                            album.ArtistName = reader.GetString(reader.GetOrdinal("ARTIST"));
+                            album.ReleaseYear = reader.GetInt32(reader.GetOrdinal("YEAR"));
+                            album.ImageURL = reader.GetString(reader.GetOrdinal("IMAGE_NAME"));
+                            album.Description = reader.GetString(reader.GetOrdinal("DESCRIPTION"));
+                            album.PlayURL = reader.GetString(reader.GetOrdinal("URL"));
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            return album;
+        }
+
+
+        public List<Album> SearchAlbumTitles(String SearchText)
+        {
+            // start with an empty list
+            List<Album> albums = new List<Album>();
+
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+
+                string sqlCmdStmt = "SELECT rowid, ALBUM_TITLE, ARTIST, YEAR, IMAGE_NAME, DESCRIPTION, URL FROM ALBUMS WHERE ALBUM_TITLE LIKE @searchPatern";
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.Parameters.AddWithValue("@searchPatern", "%" + SearchText + "%");
+                cmd.CommandText = sqlCmdStmt;
+                cmd.Connection = conn;
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Album album = new Album
+                        {
+                            ID = reader.GetInt32(reader.GetOrdinal("rowid")),
+                            SongName = reader.GetString(reader.GetOrdinal("ALBUM_TITLE")),
+                            ArtistName = reader.GetString(reader.GetOrdinal("ARTIST")),
+                            ReleaseYear = reader.GetInt32(reader.GetOrdinal("YEAR")),
+                            ImageURL = reader.GetString(reader.GetOrdinal("IMAGE_NAME")),
+                            Description = reader.GetString(reader.GetOrdinal("DESCRIPTION")),
+                            PlayURL = reader.GetString(reader.GetOrdinal("URL"))
+                        };
+                        albums.Add(album);
+                    }
+                }
+                
+            }
+
+            return albums;
+        }
+
+
+        public String getAlbumDescription(string searchAlbumID)
+        {
+            String returnDescription = "";
+
+            // connect to the SQLite server
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                String sqlCmdStmnt = "SELECT DESCRIPTION FROM ALBUMS WHERE rowid = @searchtext";
+                SQLiteCommand cmd = new SQLiteCommand(sqlCmdStmnt, conn);
+                cmd.Parameters.AddWithValue("@searchtext", searchAlbumID);
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        returnDescription = reader.GetOrdinal("DESCRIPTION").ToString();
+                    }
+                }
+                conn.Close();
+                return returnDescription;
+            }
+        }
+
+        public List<Track> getTracksByAlbumID(string albumID)
+        {
+            // start with an empty list
+            List<Track> tracks = new List<Track>();
+
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+
+                string sqlCmdStmt = "SELECT rowid, track_title, number, video_url, lyrics, albums_ID  FROM TRACKS WHERE albums_ID = @albumid";
+                SQLiteCommand cmd = new SQLiteCommand();
+                cmd.Parameters.AddWithValue("@albumid", albumID);
+                cmd.CommandText = sqlCmdStmt;
+                cmd.Connection = conn;
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Track track = new Track
+                        {
+                            //Number = reader.GetInt32(reader.GetOrdinal("rowid")),
+                            Name = reader.GetString(reader.GetOrdinal("track_title")),
+                            Number = reader.GetString(reader.GetOrdinal("number")),
+                            VideoURL = reader.GetString(reader.GetOrdinal("video_url")),
+                            Lyrics = reader.GetString(reader.GetOrdinal("lyrics")),
+                            Albums_ID = reader.GetInt32(reader.GetOrdinal("albums_ID"))
+                        };
+                        tracks.Add(track);
+                    }
+                }
+
+            }
+
+            return tracks;
         }
     }
 }
