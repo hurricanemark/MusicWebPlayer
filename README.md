@@ -85,4 +85,4 @@ Create a C# Windows Form Desktop application using Visual Studio 2022 with .NET 
 3. Create an Albums Data Access Object class, and a Tracks DAO class
 4. Build with Nuget extension System.Windows.SQLite
 
-![FrontendApp](media/newDesktopApp.png)
+
