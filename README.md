@@ -81,7 +81,8 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 Create a C# Windows Form Desktop application using Visual Studio 2022 with .NET 8.0 framework.
 1. Create a windows form
-2. Create an Album class
-3. Create an Album Data Access Object class
+2. Create an Albums class, and a Tracks class
+3. Create an Albums Data Access Object class, and a Tracks DAO class
+4. Build with Nuget extension System.Windows.SQLite
 
 ![FrontendApp](media/DesktopApp.png)
