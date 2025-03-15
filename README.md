@@ -2,7 +2,11 @@
 
 ## Demo
 
-[media/Demo.mp4](https://github.com/user-attachments/assets/3bd358f2-ff8c-4e54-a74f-a300d9c68e6b)
+[Demo](https://github.com/user-attachments/assets/1c10cb15-2ace-4170-981c-7782322cd0fe)
+
+
+
+
 
 ---
 
