@@ -270,13 +270,39 @@ namespace MusicWebPlayer
                 {
                     while (reader.Read())
                     {
-                        returnDescription = reader.GetOrdinal("DESCRIPTION").ToString();
+                        returnDescription = reader.GetString(0).ToString();
                     }
                 }
                 conn.Close();
                 return returnDescription;
             }
         }
+
+
+        public String getTrackDescription(string searchTrackNum)
+        {
+            String returnDescription = "";
+
+            // connect to the SQLite server
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                String sqlCmdStmnt = "SELECT Lyrics FROM TRACKS WHERE Number = @searchtext";
+                SQLiteCommand cmd = new SQLiteCommand(sqlCmdStmnt, conn);
+                cmd.Parameters.AddWithValue("@searchtext", searchTrackNum);
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        returnDescription = reader.GetString(0).ToString();
+                    }
+                }
+                conn.Close();
+                return returnDescription;
+            }
+        }
+
+
 
         public List<Track> getTracksByAlbumID(string albumID)
         {

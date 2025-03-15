@@ -20,6 +20,7 @@ namespace MusicWebPlayer
         BindingSource albumBindingSourceDesc = new BindingSource();
 
         BindingSource tracksBindingSource = new BindingSource();
+        BindingSource tracksBindingSourceDesc = new BindingSource();
 
         public string sqliteConnectionString = "Data Source=rolemimusic.db;Version=3;";
 
@@ -153,7 +154,6 @@ namespace MusicWebPlayer
 
             String albumID = dataGridView.Rows[rowClicked].Cells[0].Value.ToString();
             albumBindingSourceDesc.DataSource = sqlDescDao.getAlbumDescription(albumID);
-
             txt_DisplayDescription.Text = albumBindingSourceDesc.DataSource.ToString();
 
             SQLiteDAO sqlitedao = new SQLiteDAO(sqliteConnectionString);
@@ -298,6 +298,13 @@ namespace MusicWebPlayer
 
             if (gv != null && gv.SelectedRows.Count > 0)
             {
+                SQLiteDAO sqlDescDao = new SQLiteDAO(sqliteConnectionString);
+
+                // load track description
+                String trackID = gv.Rows[rowClicked].Cells[0].Value.ToString();
+                tracksBindingSourceDesc.DataSource = sqlDescDao.getTrackDescription(trackID);
+                txt_DisplayDescription.Text = tracksBindingSourceDesc.DataSource.ToString();
+
                 // load selected image
                 String videoURL = gv.Rows[rowClicked].Cells[2].Value.ToString();
 
