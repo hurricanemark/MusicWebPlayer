@@ -97,7 +97,7 @@ Create a C# Windows Form Desktop application using Visual Studio 2022 with .NET 
 1. Create a windows form
 2. Create an Albums class, and a Tracks class
 3. Create an Albums Data Access Object class, and a Tracks DAO class
-4. Build with Nuget extension System.Data.SQLite
+4. Build with Nuget extension System.Data.SQLite.  Since we started with MySQL, the framework is similar.  Replacing MySQL Data Access Objects with SQLite3 DAO is a simple task.  However, there are little nuances along the way which is a great way to learn 3rd party integration.
 
 ![FrontendApp](media/newDesktopApp.png)
 
