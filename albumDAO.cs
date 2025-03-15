@@ -174,7 +174,7 @@ namespace MusicWebPlayer
                 {
                     Track tr = new Track
                     {
-                        Number = reader.GetInt32(0),
+                        Number = reader.GetString(0),
                         Name = reader.GetString(1),
                         VideoURL = reader.GetString(2),
                         Lyrics = reader.GetString(3),

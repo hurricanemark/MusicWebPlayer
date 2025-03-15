@@ -17,4 +17,10 @@ namespace MusicWebPlayer
         public String Description { get; set; }
 
     }
+
+    internal class album_foreign_key
+    {
+        public int ID { get; set; }
+        public string AlbumName { get; set; }
+    }
 }

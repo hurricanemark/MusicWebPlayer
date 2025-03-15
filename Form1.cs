@@ -7,6 +7,9 @@ using Microsoft.Web.WebView2.Core;
 using Microsoft.VisualBasic.ApplicationServices;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Data.SQLite;
+using System.Drawing;
+
 
 namespace MusicWebPlayer
 {
@@ -17,6 +20,9 @@ namespace MusicWebPlayer
         BindingSource albumBindingSourceDesc = new BindingSource();
 
         BindingSource tracksBindingSource = new BindingSource();
+        BindingSource tracksBindingSourceDesc = new BindingSource();
+
+        public string sqliteConnectionString = "Data Source=rolemimusic.db;Version=3;";
 
         public Microsoft.Web.WebView2.Core.CoreWebView2 CoreWebView2 { get; }
 
@@ -37,6 +43,8 @@ namespace MusicWebPlayer
 
             toolTipforTracks.SetToolTip(dataGridView2, "Select a track to play");
             toolTipforTracks.Active = true;
+
+            tabControl1.SelectedIndex = 0; // trigger tabPageIndex event
         }
 
         void EnsureHttps(object sender, CoreWebView2NavigationStartingEventArgs args)
@@ -50,10 +58,13 @@ namespace MusicWebPlayer
         }
         async void InitializeAsync()
         {
+            // Create and initialize the WebView2
             await webVideo.EnsureCoreWebView2Async(null);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+
+
+        private void bnt_LoadAlbums_Click(object sender, EventArgs e)
         {
             // create two fake data items
             /*
@@ -84,25 +95,28 @@ namespace MusicWebPlayer
             albumdoa.albums.Add(A2);
             */
 
-            AlbumsDAO albumdao = new AlbumsDAO();
+            SQLiteDAO albums = new SQLiteDAO(sqliteConnectionString);
 
-            // Connect the list to the grid view control
-            albumBindingSource.DataSource = albumdao.getAllAlbums();
+            // get Album data from SQLite database
+            albumBindingSource.DataSource = albums.GetAlbumsData();
 
+            // map datasource to dataGridView
             dataGridView1.DataSource = albumBindingSource;
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void bnt_Search_Click(object sender, EventArgs e)
         {
             // search button
-            AlbumsDAO albumdao = new AlbumsDAO();
+            //AlbumsDAO albumdao = new AlbumsDAO();
 
             // Connect the list to the grid view control
-            albumBindingSource.DataSource = albumdao.searchTitles(textBox1.Text);
+            //albumBindingSource.DataSource = albumdao.searchTitles(txt_AlbumSearchText.Text);
 
+            SQLiteDAO sqlalbumdao = new SQLiteDAO(sqliteConnectionString);
+            
+            albumBindingSource.DataSource = sqlalbumdao.SearchAlbumTitles(txt_AlbumSearchText.Text);
             dataGridView1.DataSource = albumBindingSource;
-
         }
 
 
@@ -135,28 +149,45 @@ namespace MusicWebPlayer
 #pragma warning restore CS0168 // Variable is declared but never used
 
             // load selected description
-            AlbumsDAO desDAO = new AlbumsDAO();
-            String songName = dataGridView.Rows[rowClicked].Cells[1].Value.ToString();
-            albumBindingSourceDesc.DataSource = desDAO.getDescription(songName);
+            //AlbumsDAO desDAO = new AlbumsDAO();
+            SQLiteDAO sqlDescDao = new SQLiteDAO(sqliteConnectionString);
 
-            textBox2.Text = albumBindingSourceDesc.DataSource.ToString();
+            String albumID = dataGridView.Rows[rowClicked].Cells[0].Value.ToString();
+            albumBindingSourceDesc.DataSource = sqlDescDao.getAlbumDescription(albumID);
+            txt_DisplayDescription.Text = albumBindingSourceDesc.DataSource.ToString();
+
+            SQLiteDAO sqlitedao = new SQLiteDAO(sqliteConnectionString);
+
+            tracksBindingSource.DataSource = sqlitedao.getTracksByAlbumID(albumID);
+            dataGridView2.DataSource = tracksBindingSource;
+            dataGridView2.ShowCellToolTips = true;
 
 
             // load the tracks from the selected album
-            AlbumsDAO selAlbumDoa = new AlbumsDAO();
-            tracksBindingSource.DataSource = selAlbumDoa.getTracksUsingJoin((int)(dataGridView.Rows[rowClicked].Cells[0].Value));
-            dataGridView2.DataSource = tracksBindingSource;
-            dataGridView2.ShowCellToolTips = true;
+            //AlbumsDAO selAlbumDoa = new AlbumsDAO();
+            //tracksBindingSource.DataSource = selAlbumDoa.getTracksUsingJoin((int)(dataGridView.Rows[rowClicked].Cells[0].Value));
+            //dataGridView2.DataSource = tracksBindingSource;
+            //dataGridView2.ShowCellToolTips = true;
+
+            // Auto select the first row to WebVideo & kickstart the player
+            if (dataGridView2.RowCount >= 1)
+            {
+                // Simulate row click                
+                dataGridView2.Rows[0].Selected = true;
+                dataGridView2_CellContentClick(dataGridView, new DataGridViewCellEventArgs(3, 0));
+
+            }
         }
 
 
+
         // Add song into database
-        private void button3_Click(object sender, EventArgs e)
+        private void bnt_AddAlbum_Click(object sender, EventArgs e)
         {
             // Capture user input
             if (txt_SongName.TextLength == 0 || txt_SourceURL.TextLength == 0 || txt_ImageURL.TextLength == 0 || txt_Artist.TextLength == 0)
             {
-                MessageBox.Show("Incomplete inputs!"); return;
+                MessageBox.Show("Incomplete album inputs!"); return;
             }
             else
             {
@@ -170,28 +201,91 @@ namespace MusicWebPlayer
                     Description = txt_Description.Text
                 };
 
-                AlbumsDAO albumdao = new AlbumsDAO();
-                int result = albumdao.addOneAlbum(album);
-                if (result == 1)
+                // Insert into SQLite ALBUMS
+
+                SQLiteDAO sqliteDb = new SQLiteDAO(sqliteConnectionString);
+
+                SQLiteConnection sqlite_conn;
+                sqlite_conn = sqliteDb.CreateConnection();
+
+                // Create tables ALBUMS and TRACKS if they don't exist
+                sqliteDb.CreateTables(sqlite_conn);
+
+                sqliteDb.InsertAlbumData(sqlite_conn, album);
+
+                // Retrieve Albums from SQLite database
+                List<Album> readAlbum = sqliteDb.GetAlbumsData();
+
+                foreach (var row in readAlbum)
                 {
-                    // clear input text
-                    txt_SongName.Text = "";
-                    txt_Artist.Text = "";
-                    txt_Year.Text = "";
-                    txt_ImageURL.Text = "";
-                    txt_SourceURL.Text = "";
-                    txt_Description.Text = "";
-
-                    // reload the play list
-                    AlbumsDAO albumsdao = new AlbumsDAO();
-
-                    // Connect the list to the grid view control
-                    albumBindingSource.DataSource = albumsdao.getAllAlbums();
-
-                    dataGridView1.DataSource = albumBindingSource;
+                    Console.WriteLine($"ID: {row.ID}, Title: {row.SongName}, Artist: {row.ArtistName}, Year: {row.ReleaseYear}, Image: {row.ImageURL}, VidURL: {row.PlayURL}, Description: {row.Description}");
                 }
+                albumBindingSource.DataSource = readAlbum;
+                dataGridView1.DataSource = albumBindingSource;
             }
 
+        }
+
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Handle tab change logic here
+            //MessageBox.Show("Tab Changed!  Selected index: " + tabControl1.SelectedIndex.ToString());
+
+            List<album_foreign_key> myList = new List<album_foreign_key>();
+
+            if (tabControl1.SelectedIndex == 1)
+            {
+                //Track tab selected.  Check prefill parameters
+                if (comboBoxAlbum.Items.Count == 0) {
+                    // retrieve existing album index, album title
+                    for (int rowIndex = 0; rowIndex < dataGridView1.RowCount; rowIndex++)
+                    {
+                        album_foreign_key rowData = new album_foreign_key();
+                        
+                        rowData.ID = (int)(dataGridView1[0, rowIndex].Value);
+                        rowData.AlbumName = dataGridView1[1, rowIndex].Value.ToString();
+
+                        myList.Add(rowData);
+                    }
+                    // Bind the rowData to comboBoxAlbum
+                    comboBoxAlbum.DataSource = myList;
+                    comboBoxAlbum.DisplayMember = "AlbumName";
+                    comboBoxAlbum.ValueMember = "ID";
+
+                }
+            }
+        }
+
+
+
+        private void bnt_AddTrack_Click(object sender, EventArgs e)
+        {
+            if (txt_TrackName.TextLength == 0 || txt_VidURL.TextLength == 0 || txt_Lyrics.TextLength == 0 || listBoxTrackNumber.SelectedItem == null)
+            {
+                MessageBox.Show("Incomplete track inputs!"); return;
+            } else if (comboBoxAlbum.SelectedIndex == null)
+            {
+                MessageBox.Show("Must associate track with specific album by ID");
+            }
+            else 
+            {
+                String trackNum = listBoxTrackNumber.Text.Trim();
+                Track tracks = new Track
+                {
+                    
+                    Number = listBoxTrackNumber.SelectedItem.ToString(),
+                    Name = txt_TrackName.Text,
+                    VideoURL = txt_VidURL.Text,
+                    Lyrics = txt_Lyrics.Text,
+                    Albums_ID = (int)comboBoxAlbum.SelectedValue
+                };
+
+                SQLiteDAO sqltrackdao = new SQLiteDAO(sqliteConnectionString);
+                SQLiteConnection sqlite_conn;
+                sqlite_conn = sqltrackdao.CreateConnection();
+                sqltrackdao.InsertTrackData(sqlite_conn, tracks);
+            }
         }
 
 
@@ -204,13 +298,36 @@ namespace MusicWebPlayer
 
             if (gv != null && gv.SelectedRows.Count > 0)
             {
+                SQLiteDAO sqlDescDao = new SQLiteDAO(sqliteConnectionString);
+
+                // load track description
+                String trackID = gv.Rows[rowClicked].Cells[0].Value.ToString();
+                tracksBindingSourceDesc.DataSource = sqlDescDao.getTrackDescription(trackID);
+                txt_DisplayDescription.Text = tracksBindingSourceDesc.DataSource.ToString();
+
                 // load selected image
-                String videoURL = gv.Rows[rowClicked].Cells[3].Value.ToString();
+                String videoURL = gv.Rows[rowClicked].Cells[2].Value.ToString();
+
                 if (webVideo != null && webVideo.CoreWebView2 != null)
                 {
-                    webVideo.CoreWebView2.Navigate(videoURL);
+                    try
+                    {
+                        // Set the WebView2 URL
+                        webVideo.CoreWebView2.Navigate(videoURL);
+
+                        // Wait for the document to load and then request full-screen mode
+                        webVideo.CoreWebView2.NavigationCompleted += (sender, args) =>
+                        {
+                            // JavaScript to request full-screen mode
+                            webVideo.CoreWebView2.ExecuteScriptAsync("document.documentElement.requestFullscreen();");
+                        };
+                    }
+                    catch (Exception ex) { }
+
                 }
             }
         }
+
+
     }
 }
