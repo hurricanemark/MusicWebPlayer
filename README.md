@@ -83,7 +83,7 @@ Create a C# Windows Form Desktop application using Visual Studio 2022 with .NET 
 1. Create a windows form
 2. Create an Albums class, and a Tracks class
 3. Create an Albums Data Access Object class, and a Tracks DAO class
-4. Build with Nuget extension System.Windows.SQLite
+4. Build with Nuget extension System.Data.SQLite
 
 ![FrontendApp](media/newDesktopApp.png)
 
