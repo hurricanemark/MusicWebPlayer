@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="albumDAO.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\MontanaDeAro_IHaveBeenHere.png" />
     <None Remove="Resources\RolEmiLogo_03.PNG" />
     <None Remove="Resources\yt_music_channel1.jpeg" />
